@@ -1,0 +1,277 @@
+/* ============================================================
+   ESTUDIOS — Módulo B: artículos de estudio (historia, cábala, etc.)
+   Estas páginas usan fondos claros (papel/textura), a diferencia del
+   resto del sitio que es oscuro. Por eso el texto acá es oscuro, no
+   dorado — dorado sobre fondo claro es ilegible (ver ejemplo de error
+   que dio la usuaria, GUIA_MODULO_B.md, 11/9/2026).
+   ============================================================ */
+
+/* ── HERO: foto ornamentada + superposición oscura + texto claro ── */
+.estudio-hero {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  /* Fallback cuando el artículo no tiene foto hero propia todavía
+     (chakras, numerología, análisis de una tirada) — degradado en la
+     paleta del sitio, no un color plano feo. */
+  background-color: #3B1F4C;
+  background-image: linear-gradient(135deg, #3B1F4C 0%, #1A1A1A 100%);
+  padding: var(--space-6, 64px) var(--space-4) var(--space-5);
+  text-align: center;
+  overflow: hidden;
+}
+
+.estudio-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /* Superposición oscura: sin esto, el título claro se pierde contra
+     cualquier hero fotográfico (dorado, textil, lo que sea). */
+  background: linear-gradient(180deg, rgba(10,8,6,0.55) 0%, rgba(10,8,6,0.75) 100%);
+}
+
+.estudio-hero__contenido {
+  position: relative;
+  z-index: 1;
+}
+
+.estudio-hero__titulo {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: #F5EFE0;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  margin: 0 0 8px 0;
+}
+
+.estudio-hero__subtitulo {
+  color: #E8DFC8;
+  font-size: 1.05rem;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+  margin: 0;
+}
+
+/* ── ÍNDICE DEL ARTÍCULO (partes/secciones internas) ── */
+.estudio-indice {
+  max-width: 720px;
+  margin: -28px auto 0 auto;
+  position: relative;
+  z-index: 2;
+  background: #1A1A1A;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 10px;
+  padding: var(--space-3) var(--space-4);
+}
+
+.estudio-indice__titulo {
+  color: var(--secondary);
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  margin: 0 0 var(--space-2) 0;
+  text-transform: uppercase;
+}
+
+.estudio-indice__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 6px var(--space-3);
+}
+
+.estudio-indice__lista a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.estudio-indice__lista a:hover {
+  color: var(--secondary);
+}
+
+/* ── TIRA DE ARTÍCULOS (nav cruzada a los otros artículos) ── */
+.estudio-nav-articulos {
+  background: #14100C;
+  border-top: 1px solid rgba(201, 168, 76, 0.2);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+  padding: var(--space-2) var(--space-4);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.estudio-nav-articulos a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.82rem;
+  margin-right: var(--space-3);
+}
+
+.estudio-nav-articulos a:hover,
+.estudio-nav-articulos a.activo {
+  color: var(--secondary);
+}
+
+/* ── CUERPO DEL ARTÍCULO: fondo claro, texto oscuro ── */
+.estudio-cuerpo-wrap {
+  background-color: #E8E1CE; /* respaldo sólido si la textura no carga */
+  background-size: cover;
+  background-position: top center;
+  background-repeat: repeat-y;
+}
+
+.estudio-cuerpo {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4) var(--space-6);
+  color: #2A2318; /* marrón oscuro, no negro puro — más cálido sobre el papel */
+  line-height: 1.75;
+  font-size: 1.02rem;
+}
+
+.estudio-cuerpo p {
+  margin: 0 0 var(--space-3) 0;
+}
+
+.articulo__eyebrow {
+  color: #8A6D2F;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: var(--space-4) 0 4px 0;
+}
+
+.articulo__h2 {
+  font-family: 'Cinzel', serif;
+  color: #3B2E1A;
+  border-bottom: 2px solid #8A6D2F;
+  padding-bottom: 8px;
+  margin: var(--space-6) 0 var(--space-3) 0;
+}
+
+.articulo__h3 {
+  font-family: 'Cinzel', serif;
+  color: #3B2E1A;
+  margin: 0 0 var(--space-2) 0;
+  font-size: 1.25rem;
+}
+
+.articulo__h4 {
+  color: #5A4726;
+  margin: var(--space-3) 0 8px 0;
+  font-size: 1.05rem;
+}
+
+.articulo__figura {
+  margin: var(--space-4) 0;
+  text-align: center;
+}
+
+.articulo__figura img {
+  max-width: 100%;
+  border-radius: 6px;
+  cursor: zoom-in;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+}
+
+.articulo__leyenda {
+  font-size: 0.85rem;
+  color: #6B5A3A;
+  font-style: italic;
+  margin-top: 8px;
+}
+
+.articulo__leyenda--pendiente {
+  color: #A6432B;
+  font-style: normal;
+  font-weight: 600;
+}
+
+/* ── PIE: navegación anterior/siguiente + mapa de artículos ── */
+/* FIX 29/9/2026: se revierte el fijo (sticky) del 18/9/2026 — en móvil
+   ocupaba demasiada pantalla y, en varias páginas, quedaba superpuesto
+   encima del contenido (tapando texto y botones). Vuelve a ser un pie
+   de página normal, en el flujo del documento; ya no hace falta el
+   padding-bottom de compensación. */
+.estudio-pie {
+  background: #14100C;
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid rgba(201, 168, 76, 0.25);
+}
+
+.estudio-pie__anterior-siguiente {
+  max-width: 720px;
+  margin: 0 auto var(--space-3) auto;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+  padding-bottom: var(--space-3);
+  font-size: 0.85rem;
+}
+
+.estudio-pie__anterior-siguiente a {
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+.estudio-pie__mapa {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px var(--space-3);
+  justify-content: center;
+}
+
+.estudio-pie__mapa a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.estudio-pie__mapa a:hover {
+  color: var(--secondary);
+}
+
+.estudio-pie__tablas {
+  max-width: 900px;
+  margin: var(--space-3) auto 0 auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid rgba(201, 168, 76, 0.15);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px var(--space-3);
+  justify-content: center;
+}
+
+.estudio-pie__tablas-titulo {
+  width: 100%;
+  text-align: center;
+  color: var(--text-muted);
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0 0 4px 0;
+}
+
+.estudio-pie__tablas a {
+  color: var(--secondary);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.estudio-pie__tablas a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .estudio-indice__lista {
+    grid-template-columns: 1fr;
+  }
+  .estudio-pie__anterior-siguiente {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

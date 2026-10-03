@@ -1,0 +1,16 @@
+name = "el-codigo-de-las-cartas-sintesis"
+main = "sintesis-respuesta.js"
+compatibility_date = "2026-08-01"
+
+# Se crea con: wrangler kv namespace create CACHE_SINTESIS
+# y el id que devuelva se pega abajo.
+kv_namespaces = [
+  { binding = "CACHE_SINTESIS", id = "PEGAR_AQUI_EL_ID_QUE_DEVUELVE_WRANGLER" }
+]
+
+# GEMINI_API_KEY se carga como secret (no va acá en texto plano):
+#   wrangler secret put GEMINI_API_KEY
+#
+# ORIGEN_PERMITIDO si querés restringir CORS a tu dominio en vez de "*":
+[vars]
+ORIGEN_PERMITIDO = "*"

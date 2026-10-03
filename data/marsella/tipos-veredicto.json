@@ -1,0 +1,83 @@
+{
+  "t067": {
+    "tipo_veredicto": "binario",
+    "posiciones": {
+      "C1": "descriptiva",
+      "C2": "en_contra",
+      "C3": "a_favor",
+      "C4": "resolutiva"
+    }
+  },
+  "t066": {
+    "tipo_veredicto": "resolutiva_unica",
+    "posicion_resolutiva": "C4"
+  },
+  "t137": {
+    "tipo_veredicto": "resolutiva_unica",
+    "posicion_resolutiva": "C4"
+  },
+  "t144": {
+    "tipo_veredicto": "resolutiva_unica",
+    "posicion_resolutiva": "C3"
+  },
+  "t248": {
+    "tipo_veredicto": "resolutiva_unica",
+    "posicion_resolutiva": "C4"
+  },
+  "t273": {
+    "tipo_veredicto": "resolutiva_unica",
+    "posicion_resolutiva": "C3"
+  },
+  "t282": {
+    "tipo_veredicto": "resolutiva_unica",
+    "posicion_resolutiva": "C3"
+  },
+  "t283": {
+    "tipo_veredicto": "resolutiva_unica",
+    "posicion_resolutiva": "C4"
+  },
+  "t208": {
+    "tipo_veredicto": "eleccion_ab"
+  },
+  "t294": {
+    "tipo_veredicto": "eleccion_ab"
+  },
+  "t276": {
+    "tipo_veredicto": "eleccion_ab"
+  },
+  "t286": {
+    "tipo_veredicto": "eleccion_ab"
+  },
+  "t030": {
+    "tipo_veredicto": "sin_veredicto",
+    "nota": "estructura asimétrica, pendiente de rediseño"
+  },
+  "t047": {
+    "tipo_veredicto": "sin_veredicto"
+  },
+  "t170": {
+    "tipo_veredicto": "sin_veredicto"
+  },
+  "t179": {
+    "tipo_veredicto": "sin_veredicto"
+  },
+  "t295": {
+    "tipo_veredicto": "sin_veredicto"
+  },
+  "t121": {
+    "tipo_veredicto": "sin_veredicto",
+    "nota": "ultima posicion es pronostico, no recomendacion"
+  },
+  "t284": {
+    "tipo_veredicto": "sin_veredicto",
+    "nota": "ultima posicion es pronostico, no recomendacion"
+  },
+  "t292": {
+    "tipo_veredicto": "sin_veredicto",
+    "nota": "ultima posicion es pronostico, no recomendacion"
+  },
+  "t293": {
+    "tipo_veredicto": "sin_veredicto",
+    "nota": "ultima posicion es pronostico, no recomendacion"
+  }
+}

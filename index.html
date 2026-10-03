@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Código de las Cartas — Tarot de Marsella &amp; Rider-Waite-Smith</title>
+  <meta name="description" content="Lecturas de Tarot y conocimiento esotérico en dos tradiciones: Tarot de Marsella y Rider-Waite-Smith.">
+
+  <link rel="stylesheet" href="css/icons.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0A0A0A">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <script src="js/pwa.js" defer></script>
+</head>
+<body data-page="index">
+
+  <header class="nav">
+    <a href="index.html" class="nav__logo">El Código de las Cartas</a>
+    <nav class="nav__links">
+      <div id="auth-widget"></div>
+      <a href="arcanos.html" class="nav__link">
+        <i class="ph ph-cards" aria-hidden="true"></i>&nbsp;Arcanos
+      </a>
+      <a href="combinaciones-rws.html" class="nav__link">
+        <i class="ph ph-shuffle" aria-hidden="true"></i>&nbsp;Combinaciones
+      </a>
+      <a href="estudios.html" class="nav__link">
+        <i class="ph ph-book-open-text" aria-hidden="true"></i>&nbsp;Estudios
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <div class="container--narrow">
+        <h1 class="page-header__title">El Código de las Cartas</h1>
+        <p class="page-header__subtitle">
+          Dos tradiciones del Tarot, una misma búsqueda: el Tarot de Marsella
+          y el Rider-Waite-Smith, cada uno con su propio lenguaje simbólico
+          y sus propias lecturas.
+        </p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container--narrow">
+        <div class="flex-col gap-4" style="max-width: 720px; margin: 0 auto;">
+
+          <div class="card">
+            <h2 style="font-family:'Cinzel',serif; color: var(--secondary); font-size: 1.25rem; margin-bottom: var(--space-2);">
+              <i class="ph ph-shuffle" aria-hidden="true"></i>&nbsp; Consultas de Tarot
+            </h2>
+            <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: var(--space-3);">
+              Elegí una tirada entre 282 opciones repartidas en 10 temas y recibí
+              una lectura construida a partir de más de 24.000 combinaciones de
+              cartas posibles, con interpretación propia según la tradición que
+              elijas.
+            </p>
+            <a href="introduccion.html" class="btn btn--primary">
+              Comenzar consulta <i class="ph ph-arrow-right" aria-hidden="true"></i>
+            </a>
+          </div>
+
+          <div class="card">
+            <h2 style="font-family:'Cinzel',serif; color: var(--secondary); font-size: 1.25rem; margin-bottom: var(--space-2);">
+              <i class="ph ph-book-open-text" aria-hidden="true"></i>&nbsp; Conocimiento del Tarot
+            </h2>
+            <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: var(--space-3);">
+              Historia, simbolismo y sistemas esotéricos del Tarot: de la Golden
+              Dawn a la Cábala, de la numerología a la psicología junguiana.
+              Páginas libres, sin necesidad de hacer una consulta primero.
+            </p>
+            <a href="estudios.html" class="btn btn--outline">
+              Explorar Estudios <i class="ph ph-arrow-right" aria-hidden="true"></i>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="section--tight" style="text-align:center; color: var(--text-muted); font-size: 0.8rem;">
+    <p>El Código de las Cartas · Tarot de Marsella &amp; Rider-Waite-Smith</p>
+  </footer>
+
+  <script type="module">
+    import { initAuthWidget } from './js/auth-widget.js';
+    initAuthWidget('auth-widget');
+  </script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
