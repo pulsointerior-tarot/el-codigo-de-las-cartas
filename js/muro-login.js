@@ -25,7 +25,7 @@
 
 import { onCambioAuth, cerrarSesion, iniciarSesionConGoogle, mensajeError } from './auth.js';
 
-const CORREOS_PERMITIDOS = ['kekabgm@gmail.com', 'hhjdxz@gmail.com'];
+const CORREOS_PERMITIDOS = ['kekabgm@gmail.com', 'hhjdxz@gmail.com', 'kekainsight@gmail.com', 'pulsointerior24@gmail.com'];
 
 let _overlay = null;
 
