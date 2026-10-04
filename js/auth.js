@@ -66,6 +66,16 @@ export function getUsuarioActual() {
 }
 
 /**
+ * ID token de Firebase del usuario logueado, para mandar al Worker de
+ * Cloudflare como "Authorization: Bearer <esto>" (ver sintesis-ia.js y
+ * cloudflare-worker/sintesis-respuesta.js). Firebase lo renueva solo
+ * si ya venció (dura 1 hora); null si no hay nadie logueado.
+ */
+export async function obtenerIdToken() {
+  return auth.currentUser ? await auth.currentUser.getIdToken() : null;
+}
+
+/**
  * Traduce los códigos de error más comunes de Firebase Auth a mensajes
  * en español. No cubre todos los códigos posibles — para los no
  * mapeados, devuelve un mensaje genérico en vez del código crudo.

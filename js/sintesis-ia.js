@@ -16,6 +16,8 @@
  * @exports generarLecturaCompleta
  */
 
+import { obtenerIdToken } from './auth.js';
+
 // URL del Worker desplegado en Cloudflare (ver cloudflare-worker/README.md).
 // Vacío = esta función no hace nada, y quien la llama debe mostrar su
 // propio contenido de respaldo.
@@ -42,13 +44,21 @@ const TIMEOUT_MS = 25000;
 export async function generarLecturaCompleta({ idTirada, nombreTirada, cartas, combinaciones }) {
   if (!WORKER_URL) return null;
 
+  // FIX 3/10/2026: el Worker ahora exige estar logueado con un correo
+  // autorizado (ver cloudflare-worker/sintesis-respuesta.js). Sin token
+  // ni siquiera vale la pena intentar — el muro de login (muro-login.js)
+  // ya debería haber bloqueado la página antes de llegar acá, esto es
+  // un respaldo por si algo llama a esta función de otra forma.
+  const idToken = await obtenerIdToken();
+  if (!idToken) return null;
+
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
   try {
     const resp = await fetch(WORKER_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
       body: JSON.stringify({ idTirada, nombreTirada, cartas, combinaciones: combinaciones || [] }),
       signal: controller.signal,
     });
