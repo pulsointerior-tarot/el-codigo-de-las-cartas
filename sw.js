@@ -18,7 +18,7 @@
  *   Para forzar que todos los usuarios descarguen todo de nuevo:
  *   cambia CACHE_VERSION (por ejemplo 'v2').
  */
-const CACHE_VERSION = 'v3'; // 2/10/2026: fix del propio Service Worker — "red primero" podía quedarse pegado a la caché HTTP del navegador y nunca pedir el archivo nuevo de verdad
+const CACHE_VERSION = 'v4'; // 3/10/2026: muro de login (js/muro-login.js) + control de acceso real en el Worker
 const CACHE_CARCASA = 'codigo-cartas-carcasa-' + CACHE_VERSION;
 const CACHE_DATOS = 'codigo-cartas-datos-' + CACHE_VERSION;
 const CACHE_IMAGENES = 'codigo-cartas-imagenes-' + CACHE_VERSION;
@@ -92,6 +92,7 @@ const PRECARGAR = [
   "js/historial.js",
   "js/images.js",
   "js/main.js",
+  "js/muro-login.js",
   "js/max-combinaciones.js",
   "js/navigation.js",
   "js/readings-marsella.js",
