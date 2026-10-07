@@ -127,6 +127,59 @@
       return timestamp.toDate().toLocaleDateString('es', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
+    // Bloque "Mis notas" de una lectura guardada (solo muestra lo que se rellenó)
+    function _htmlConsulta(c) {
+      if (!c) return '';
+      const campos = [
+        ['Contexto de la consulta', c.contexto],
+        ['Interpretación personal', c.interpretacionPersonal],
+        ['Notas libres', c.notasLibres],
+        ['Observaciones durante la lectura', c.observaciones],
+        ['Carta o posición que llamó la atención', c.cartaDestacada],
+      ].filter(([, v]) => v && String(v).trim());
+      const etiquetas = (c.etiquetas || []).filter(Boolean);
+      if (!campos.length && !etiquetas.length && !c.estadoAnimo) return '';
+      const h = `font-family:'Cinzel',serif; color: var(--secondary); font-size: 0.85rem; margin: var(--space-3) 0 var(--space-1);`;
+      return `
+        <h3 style="${h}">Mis notas</h3>
+        ${c.estadoAnimo ? `<p style="font-size:0.85rem;"><strong>Estado de ánimo:</strong> ${_esc(c.estadoAnimo)}</p>` : ''}
+        ${etiquetas.length ? `<p style="font-size:0.85rem;"><strong>Etiquetas:</strong> ${etiquetas.map(_esc).join(' · ')}</p>` : ''}
+        ${campos.map(([titulo, valor]) => `
+          <p style="font-size:0.85rem; margin: var(--space-2) 0 2px;"><strong>${_esc(titulo)}</strong></p>
+          <p style="font-size:0.85rem; white-space: pre-wrap; margin:0;">${_esc(valor)}</p>
+        `).join('')}`;
+    }
+
+    // Veredicto: lecturas nuevas guardan las dos vistas; las antiguas, un solo bloque
+    function _htmlVeredicto(l) {
+      const h = `font-family:'Cinzel',serif; color: var(--secondary); font-size: 0.85rem; margin: var(--space-3) 0 var(--space-2);`;
+      const caja = 'font-size: 0.85rem; color: var(--text-main); line-height: 1.6;';
+      if (!l.vistaEstudioHtml && !l.vistaLecturaHtml) {
+        return `<h3 style="${h}">Veredicto</h3>
+          <div style="${caja}">${l.resultadoHtml || '<span style="color:var(--text-muted);">Sin veredicto guardado.</span>'}</div>`;
+      }
+      const id = _esc(l.id);
+      const hayLectura = !!l.vistaLecturaHtml;
+      return `
+        <h3 style="${h}">Veredicto</h3>
+        <div class="toggle-vista" role="tablist">
+          <button type="button" class="toggle-vista__btn ${hayLectura ? 'toggle-vista__btn--activo' : ''}" data-vista-hist="lectura" data-lectura-id="${id}" role="tab">Vista de lectura</button>
+          <button type="button" class="toggle-vista__btn ${hayLectura ? '' : 'toggle-vista__btn--activo'}" data-vista-hist="estudio" data-lectura-id="${id}" role="tab">Vista de estudio</button>
+        </div>
+        <div id="vista-lectura-${id}" style="${caja} ${hayLectura ? '' : 'display:none;'}">
+          ${hayLectura ? l.vistaLecturaHtml : ''}
+        </div>
+        <div id="vista-estudio-${id}" style="${caja} ${hayLectura ? 'display:none;' : ''}">
+          ${!hayLectura ? '<p style="color:var(--text-muted); font-style:italic;">La vista de lectura no se pudo generar al guardar esta lectura.</p>' : ''}
+          ${l.vistaEstudioHtml || '<span style="color:var(--text-muted);">Sin vista de estudio guardada.</span>'}
+        </div>`;
+    }
+
+    function _hora(timestamp) {
+      if (!timestamp || !timestamp.toDate) return '';
+      return ' · ' + timestamp.toDate().toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
+    }
+
     async function _renderHistorial(uid) {
       contenido.innerHTML = `<p style="text-align:center; color: var(--text-muted);"><i class="ph ph-spinner" aria-hidden="true"></i> Cargando tu historial…</p>`;
 
@@ -156,7 +209,7 @@
               <div class="lectura-card__meta">
                 ${_esc(lectura.tradicion === 'rws' ? 'Rider-Waite-Smith' : 'Marsella')}
                 · ${lectura.cartas?.length || 0} carta${lectura.cartas?.length === 1 ? '' : 's'}
-                · ${_fecha(lectura.timestamp)}
+                · ${_fecha(lectura.timestamp)}${_hora(lectura.timestamp)}
               </div>
             </div>
             <button class="btn-eliminar-lectura" data-eliminar="${_esc(lectura.id)}" type="button">
@@ -182,10 +235,8 @@
               `).join('')}
             ` : ''}
 
-            <h3 style="font-family:'Cinzel',serif; color: var(--secondary); font-size: 0.85rem; margin: var(--space-3) 0 var(--space-2);">Veredicto</h3>
-            <div style="font-size: 0.85rem; color: var(--text-main); line-height: 1.6;">
-              ${lectura.resultadoHtml || '<span style="color:var(--text-muted);">Sin veredicto guardado.</span>'}
-            </div>
+            ${_htmlConsulta(lectura.consulta)}
+            ${_htmlVeredicto(lectura)}
           </div>
         </div>
       `).join('');
@@ -195,6 +246,17 @@
           if (e.target.closest('[data-eliminar]')) return;
           const id = header.dataset.toggle;
           document.getElementById(`detalle-${id}`).classList.toggle('abierto');
+        });
+      });
+
+      contenido.querySelectorAll('[data-vista-hist]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.lecturaId;
+          const vista = btn.dataset.vistaHist;
+          document.getElementById(`vista-lectura-${id}`).style.display = vista === 'lectura' ? '' : 'none';
+          document.getElementById(`vista-estudio-${id}`).style.display = vista === 'estudio' ? '' : 'none';
+          contenido.querySelectorAll(`[data-lectura-id="${id}"]`).forEach(b =>
+            b.classList.toggle('toggle-vista__btn--activo', b === btn));
         });
       });
 
