@@ -170,7 +170,7 @@
           ${hayLectura ? l.vistaLecturaHtml : ''}
         </div>
         <div id="vista-estudio-${id}" style="${caja} ${hayLectura ? 'display:none;' : ''}">
-          ${!hayLectura ? '<p style="color:var(--text-muted); font-style:italic;">La vista de lectura no se pudo generar al guardar esta lectura.</p>' : ''}
+          ${!hayLectura ? '<p style="color:var(--text-muted); font-style:italic;">En esta consulta no se abrió la vista de lectura, por eso solo se guardó la de estudio.</p>' : ''}
           ${l.vistaEstudioHtml || '<span style="color:var(--text-muted);">Sin vista de estudio guardada.</span>'}
         </div>`;
     }
