@@ -48,6 +48,7 @@
   <link rel="icon" type="image/png" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <script src="js/pwa.js" defer></script>
+  <link rel="stylesheet" href="nuevo-estilos.css?v=6">
 </head>
 <body data-page="veredicto-marsella">
 
@@ -55,6 +56,7 @@
     <a href="index.html" class="nav__logo">El Código de las Cartas</a>
     <nav class="nav__links">
       <div id="auth-widget"></div>
+      <a href="historial.html" class="nav__link" id="nav-mi-historial"><i class="ph ph-stack" aria-hidden="true"></i>&nbsp;Mi Historial</a>
       <a href="historial.html" class="nav__link"><i class="ph ph-clock-counter-clockwise" aria-hidden="true"></i>&nbsp;Mi historial</a>
       <a href="index.html" class="nav__link"><i class="ph ph-house" aria-hidden="true"></i>&nbsp;Inicio</a>
     </nav>
@@ -78,7 +80,7 @@
     import { initAuthWidget } from './js/auth-widget.js';
     initAuthWidget('auth-widget');
   </script>
-  <script type="module" src="js/veredicto-marsella.js?v=5"></script>
+  <script type="module" src="nuevo-veredicto-marsella.js?v=6"></script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,116 @@
+/* nuevo-estilos.css — estilos añadidos (formulario de notas, encabezados de posición, placeholder Marsella) */
+/* ─────────────────────────────────────────────────────────────
+   AÑADIDO 5/10/2026 — cambios de Kiko (documento "cambios_codigo")
+   ───────────────────────────────────────────────────────────── */
+
+/* Placeholder de carta — Marsella tradicional (marst1).
+   Cuando la carta es una <img> real (no el <div> vacío), la regla
+   .placeholder-carta.marst1 de arriba no le aplicaba: la imagen heredaba
+   la proporción 1/1.666 del resto de mazos y object-fit:cover recortaba
+   la parte baja de la foto (marst1 mide 1/1.899). Se ajusta por el
+   data-mazo que ya lleva la <img>. height:auto anula las alturas fijas
+   de responsive.css para móviles. */
+img[data-mazo="marst1"].placeholder-carta-full,
+img[data-mazo="marst1"].placeholder-carta-medium,
+img[data-mazo="marst1"].placeholder-carta-thumb,
+img[data-mazo="marst1"].placeholder-carta-icon {
+  aspect-ratio: 1 / 1.899;
+  height: auto;
+}
+
+/* Encabezado de carta con posición: "C1 — significado" + nombre debajo */
+.lectura__carta-nombre,
+.parte-a__carta-nombre {
+  margin: 0 0 var(--space-2) 0;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  color: var(--text-main);
+  text-transform: uppercase;
+}
+
+/* Formulario del consultante (al pie del veredicto) */
+.formulario-consulta {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  background: var(--bg-card);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 8px;
+}
+.formulario-consulta h2 {
+  margin-bottom: var(--space-1);
+}
+.formulario-consulta__campo {
+  margin-top: var(--space-4);
+}
+.formulario-consulta__etiqueta {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: var(--secondary);
+  margin-bottom: var(--space-1);
+}
+.formulario-consulta__ayuda {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0 0 var(--space-1) 0;
+}
+.formulario-consulta__fecha {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.formulario-consulta__area,
+.formulario-consulta__linea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-2);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 6px;
+  color: var(--text-main);
+  font: inherit;
+  line-height: 1.6;
+}
+.formulario-consulta__area {
+  min-height: 9rem;
+  resize: vertical;   /* sin límite de caracteres: no hay maxlength */
+}
+.formulario-consulta__linea {
+  margin-top: var(--space-2);
+}
+.formulario-consulta__area:focus,
+.formulario-consulta__linea:focus {
+  outline: 2px solid var(--secondary);
+  outline-offset: 1px;
+}
+.formulario-consulta__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.formulario-consulta__chip {
+  cursor: pointer;
+}
+.formulario-consulta__chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.formulario-consulta__chip span {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.formulario-consulta__chip input:checked + span {
+  background: var(--secondary);
+  color: #0a0a0a;
+  border-color: var(--secondary);
+}
+.formulario-consulta__chip input:focus-visible + span {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+}

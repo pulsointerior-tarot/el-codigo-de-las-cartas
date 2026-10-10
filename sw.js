@@ -18,8 +18,7 @@
  *   Para forzar que todos los usuarios descarguen todo de nuevo:
  *   cambia CACHE_VERSION (por ejemplo 'v2').
  */
-const CACHE_VERSION = 'v5'; // 7/10/2026: formulario del consultante + guardado de las 2 vistas del veredicto (js/formulario-consulta.js)
-// (v4: 3/10/2026 muro de login + control de acceso real en el Worker)
+const CACHE_VERSION = 'v6'; // 10/10/2026: todo lo nuevo (formulario de notas, 2 vistas, Mi Historial) en archivos de la raíz nuevo-*.js
 const CACHE_CARCASA = 'codigo-cartas-carcasa-' + CACHE_VERSION;
 const CACHE_DATOS = 'codigo-cartas-datos-' + CACHE_VERSION;
 const CACHE_IMAGENES = 'codigo-cartas-imagenes-' + CACHE_VERSION;
@@ -81,7 +80,11 @@ const PRECARGAR = [
   "js/auth.js",
   "js/automatic.js",
   "js/card-helpers.js",
-  "js/formulario-consulta.js",
+  "nuevo-formulario.js",
+  "nuevo-guardar.js",
+  "nuevo-veredicto-marsella.js",
+  "nuevo-veredicto-rws.js",
+  "nuevo-estilos.css",
   "js/combinations-marsella.js",
   "js/combinations-rws.js",
   "js/data-marsella.js",
