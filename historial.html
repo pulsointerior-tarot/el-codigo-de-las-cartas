@@ -161,7 +161,8 @@
           <div style="${caja}">${l.resultadoHtml || '<span style="color:var(--text-muted);">Sin veredicto guardado.</span>'}</div>`;
       }
       const id = _esc(l.id);
-      const hayLectura = !!l.vistaLecturaHtml;
+      const _textoVisible = (h) => String(h || '').replace(/<[^>]*>/g, '').trim().length > 0;
+      const hayLectura = _textoVisible(l.vistaLecturaHtml);
       return `
         <h3 style="${h}">Veredicto</h3>
         <div class="toggle-vista" role="tablist">
@@ -172,7 +173,7 @@
           ${hayLectura ? l.vistaLecturaHtml : ''}
         </div>
         <div id="vista-estudio-${id}" style="${caja} ${hayLectura ? 'display:none;' : ''}">
-          ${!hayLectura ? '<p style="color:var(--text-muted); font-style:italic;">En esta consulta no se abrió la vista de lectura, por eso solo se guardó la de estudio.</p>' : ''}
+          ${!hayLectura ? `<p style="color:var(--text-muted); font-style:italic;">${l.vistaLecturaHtml ? 'La vista de lectura se guardó vacía (la IA no devolvió texto).' : 'En esta consulta no se abrió la vista de lectura, por eso solo se guardó la de estudio.'}</p>` : ''}
           ${l.vistaEstudioHtml || '<span style="color:var(--text-muted);">Sin vista de estudio guardada.</span>'}
         </div>`;
     }

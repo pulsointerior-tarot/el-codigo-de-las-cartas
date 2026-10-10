@@ -817,7 +817,13 @@ async function _generarHtmlLecturaIA(tirada, cartas, posicionesPorId, pares) {
       if (t) significados.set(codigos[i], t);
     });
   }
-  return { html: _renderTextoLecturaIA(texto, codigos, significados), ok: true };
+  const html = _renderTextoLecturaIA(texto, codigos, significados);
+  // Si la IA devolvió solo espacios o algo sin texto visible, cuenta como fallo:
+  // se muestra el resumen simple y NO se guarda una vista de lectura vacía.
+  if (!html.replace(/<[^>]*>/g, '').trim()) {
+    return { html: _fallbackVistaLectura(cartas, posicionesPorId), ok: false };
+  }
+  return { html, ok: true };
 }
 
 /**
