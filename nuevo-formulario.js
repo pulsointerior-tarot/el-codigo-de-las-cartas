@@ -1,18 +1,14 @@
 /**
  * @file nuevo-formulario.js
- * @description Formulario que el consultante completa al pie del veredicto
- *   (compartido por veredicto-marsella.js y veredicto-rws.js). Vive FUERA
- *   del contenedor que cambia al alternar "Vista de lectura" / "Vista de
- *   estudio", así que lo escrito no se pierde al cambiar de vista.
+ * @description Piezas compartidas del veredicto: bloque de guardado (aviso de qué
+ *   vistas se guardarán + botón), listas de etiquetas y estados de ánimo (las usan
+ *   las notas del historial) y el encabezado de carta con su posición.
  *
- *   Campos (definidos con Kiko, 5/10/2026): fecha y hora automática,
- *   contexto de la consulta, etiquetas, interpretación personal, notas
- *   libres, observaciones durante la lectura, carta o posición que llamó
- *   la atención y estado de ánimo (opciones fijas). Los cuadros de texto
- *   no tienen límite de caracteres.
+ *   Las NOTAS ya no están en el veredicto: se completan desde Mi Historial
+ *   (ver nuevo-notas.js).
  *
- * @exports ETIQUETAS_BASE, ESTADOS_ANIMO, renderFormularioConsulta,
- *   conectarFormularioConsulta, leerFormularioConsulta, mostrarEstadoVistas
+ * @exports ETIQUETAS_BASE, ESTADOS_ANIMO, mostrarEstadoVistas, renderBloqueGuardar,
+ *   conectarBloqueGuardar, renderEncabezadoPosicion
  */
 
 export const ETIQUETAS_BASE = [
@@ -40,79 +36,16 @@ export function mostrarEstadoVistas(estado) {
   if (el && TEXTOS_ESTADO[estado]) el.innerHTML = TEXTOS_ESTADO[estado];
 }
 
-function _esc(str) {
-  const div = document.createElement('div');
-  div.textContent = str ?? '';
-  return div.innerHTML;
-}
-
-function _fechaHoraAhora() {
-  return new Date().toLocaleString('es', { dateStyle: 'long', timeStyle: 'short' });
-}
-
-function _area(id, etiqueta, ayuda) {
+/** @returns {string} HTML del bloque de guardado (al final del veredicto). */
+export function renderBloqueGuardar() {
   return `
-    <div class="formulario-consulta__campo">
-      <label for="${id}" class="formulario-consulta__etiqueta">${etiqueta}</label>
-      ${ayuda ? `<p class="formulario-consulta__ayuda">${ayuda}</p>` : ''}
-      <textarea id="${id}" class="formulario-consulta__area" rows="5"></textarea>
-    </div>`;
-}
-
-/** @returns {string} HTML del formulario (se inserta al final del veredicto). */
-export function renderFormularioConsulta() {
-  return `
-    <section class="formulario-consulta" id="formulario-consulta" aria-labelledby="formulario-consulta-titulo">
-      <h2 id="formulario-consulta-titulo">Mis notas de esta consulta</h2>
-      <p class="formulario-consulta__ayuda">
-        Todo esto es opcional. Se guarda junto con la lectura cuando pulsás "Guardar en historial".
-      </p>
-
-      <div class="formulario-consulta__campo">
-        <span class="formulario-consulta__etiqueta">Fecha y hora</span>
-        <p class="formulario-consulta__fecha">${_esc(_fechaHoraAhora())}
-          <span class="formulario-consulta__ayuda">(se registra sola al guardar)</span></p>
-      </div>
-
-      ${_area('fc-contexto', 'Contexto de la consulta', 'Qué estaba ocurriendo cuando se hizo la lectura.')}
-
-      <div class="formulario-consulta__campo">
-        <span class="formulario-consulta__etiqueta" id="fc-etiquetas-label">Etiquetas</span>
-        <div class="formulario-consulta__chips" role="group" aria-labelledby="fc-etiquetas-label">
-          ${ETIQUETAS_BASE.map((e, i) => `
-            <label class="formulario-consulta__chip">
-              <input type="checkbox" name="fc-etiqueta" value="${_esc(e)}" id="fc-etiqueta-${i}">
-              <span>${_esc(e)}</span>
-            </label>`).join('')}
-        </div>
-        <input type="text" id="fc-etiquetas-otras" class="formulario-consulta__linea"
-               placeholder="Otras etiquetas, separadas por coma">
-      </div>
-
-      ${_area('fc-interpretacion', 'Interpretación personal del lector')}
-      ${_area('fc-notas', 'Notas libres')}
-      ${_area('fc-observaciones', 'Observaciones durante la lectura')}
-      ${_area('fc-carta-destacada', 'Carta o posición que llamó especialmente la atención')}
-
-      <div class="formulario-consulta__campo">
-        <span class="formulario-consulta__etiqueta" id="fc-animo-label">Estado de ánimo</span>
-        <div class="formulario-consulta__chips" role="radiogroup" aria-labelledby="fc-animo-label">
-          ${ESTADOS_ANIMO.map((e, i) => `
-            <label class="formulario-consulta__chip">
-              <input type="radio" name="fc-animo" value="${_esc(e)}" id="fc-animo-${i}">
-              <span>${_esc(e)}</span>
-            </label>`).join('')}
-        </div>
-      </div>
-
-      <p id="fc-aviso-cambios" class="formulario-consulta__ayuda" role="status" hidden style="color: var(--secondary);">
-        Hay cambios sin guardar: pulsa «Actualizar lectura guardada» para que queden en el historial.
-      </p>
-
+    <section class="guardar-lectura" id="guardar-lectura">
       <p id="fc-estado-vistas" class="formulario-consulta__ayuda" role="status" aria-live="polite">
         ${TEXTOS_ESTADO['solo-estudio']}
       </p>
-
+      <p class="formulario-consulta__ayuda">
+        Las notas las puedes añadir después, abriendo la lectura en Mi Historial.
+      </p>
       <div class="acciones">
         <button id="btn-guardar-historial-form" type="button" class="btn btn--primary">
           Guardar en historial
@@ -122,55 +55,11 @@ export function renderFormularioConsulta() {
 }
 
 /**
- * Conecta el botón de guardar del formulario. Llamar una sola vez, después
- * de insertar el HTML en la página.
- * @param {() => void} onGuardar
+ * Conecta el botón de guardar. Llamar una sola vez, tras insertar el HTML.
+ * @param {() => (void|Promise<void>)} onGuardar
  */
-export function conectarFormularioConsulta(onGuardar) {
-  const btn = document.getElementById('btn-guardar-historial-form');
-  const aviso = document.getElementById('fc-aviso-cambios');
-  btn?.addEventListener('click', async () => {
-    await onGuardar();
-    if (aviso) aviso.hidden = true;
-  });
-  // Tras el primer guardado, cualquier cambio en las notas avisa de que hay que actualizar.
-  const form = document.getElementById('formulario-consulta');
-  const marcar = () => { if (aviso && btn && btn.textContent.includes('Actualizar')) aviso.hidden = false; };
-  form?.addEventListener('input', marcar);
-  form?.addEventListener('change', marcar);
-}
-
-function _valor(id) {
-  return document.getElementById(id)?.value ?? '';
-}
-
-/**
- * Lee el estado actual del formulario. Siempre devuelve strings/arrays
- * (nunca undefined — Firestore rechaza `undefined`).
- * @returns {{
- *   fechaHora: string, contexto: string, etiquetas: string[],
- *   interpretacionPersonal: string, notasLibres: string, observaciones: string,
- *   cartaDestacada: string, estadoAnimo: string
- * }}
- */
-export function leerFormularioConsulta() {
-  const marcadas = [...document.querySelectorAll('input[name="fc-etiqueta"]:checked')].map(i => i.value);
-  const otras = _valor('fc-etiquetas-otras')
-    .split(',')
-    .map(s => s.trim().slice(0, 40))
-    .filter(Boolean);
-  const etiquetas = [...new Set([...marcadas, ...otras])];
-
-  return {
-    fechaHora: new Date().toISOString(),
-    contexto: _valor('fc-contexto'),
-    etiquetas,
-    interpretacionPersonal: _valor('fc-interpretacion'),
-    notasLibres: _valor('fc-notas'),
-    observaciones: _valor('fc-observaciones'),
-    cartaDestacada: _valor('fc-carta-destacada'),
-    estadoAnimo: document.querySelector('input[name="fc-animo"]:checked')?.value ?? '',
-  };
+export function conectarBloqueGuardar(onGuardar) {
+  document.getElementById('btn-guardar-historial-form')?.addEventListener('click', onGuardar);
 }
 
 /**

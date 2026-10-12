@@ -19,7 +19,7 @@ import { mapearTemaAColumna } from './js/readings-rws.js';
 import { getCombinacionDirecta, renderFilaResumenCombinacion } from './js/combinations-rws.js';
 import { getNombreCompleto, renderPlaceholderCarta } from './js/card-helpers.js';
 import { renderEncabezadoPosicion } from './nuevo-formulario.js';
-import { renderFormularioConsulta, conectarFormularioConsulta, mostrarEstadoVistas } from './nuevo-formulario.js';
+import { renderBloqueGuardar, conectarBloqueGuardar, mostrarEstadoVistas } from './nuevo-formulario.js';
 import { getMazo, getTiradaActual } from './js/navigation.js';
 import { fusionarTextos } from './js/fusion-sinonimos.js';
 import { fusionarTiempos } from './js/tiempo-fusion.js';
@@ -895,7 +895,7 @@ async function _render() {
       <button type="button" class="toggle-vista__btn" data-vista="estudio" role="tab">Vista de estudio</button>
     </div>
     <div id="cuerpo-veredicto"></div>
-    ${renderFormularioConsulta()}
+    ${renderBloqueGuardar()}
   `;
 
   const cuerpo = document.getElementById('cuerpo-veredicto');
@@ -960,7 +960,7 @@ async function _render() {
 
   let _guardando = false;
   let _lecturaGuardadaId = null;   // tras el primer guardado, los siguientes actualizan esa misma ficha
-  conectarFormularioConsulta(async () => {
+  conectarBloqueGuardar(async () => {
     if (_guardando) return;
     _guardando = true;
     const btn = document.getElementById('btn-guardar-historial-form');

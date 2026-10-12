@@ -10,7 +10,6 @@ import { guardarLectura } from './js/historial.js';
 import { mostrarToast } from './js/main.js';
 import { db } from './js/firebase-init.js';
 import { doc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js';
-import { leerFormularioConsulta } from './nuevo-formulario.js';
 
 // Actualiza una ficha ya guardada (misma ficha, sin crear otra). Vive aquí para
 // no depender de js/historial.js.
@@ -81,8 +80,6 @@ export function guardarLecturaActual(datos) {
       vistaEstudioHtml: vistas.vistaEstudioHtml,
       vistaLecturaHtml: vistas.vistaLecturaHtml,
       lecturaGenerada: vistas.lecturaGenerada,
-      // Formulario del consultante (contexto, etiquetas, notas, ánimo…)
-      consulta: leerFormularioConsulta(),
     };
 
     const bytes = new Blob([JSON.stringify(lectura)]).size;
@@ -99,11 +96,8 @@ export function guardarLecturaActual(datos) {
         id = await guardarLectura(uid, lectura);
         datos.onGuardada?.(id);
       }
-      const c = lectura.consulta || {};
-      const conNotas = [c.contexto, c.interpretacionPersonal, c.notasLibres, c.observaciones, c.cartaDestacada, c.estadoAnimo]
-        .some(v => String(v || '').trim()) || (c.etiquetas || []).length > 0;
-      const vistasTxt = (vistas.lecturaGenerada ? 'con las dos vistas' : 'con la vista de estudio')
-        + (conNotas ? ', con notas' : ', sin notas');
+      const vistasTxt = vistas.lecturaGenerada ? 'con las dos vistas' : 'con la vista de estudio';
+      // (Las notas NO se guardan aquí: se añaden desde Mi Historial y no se pisan al actualizar.)
       mostrarToast(
         datos.lecturaId ? `Lectura actualizada en tu historial (${vistasTxt}).`
                         : `Lectura guardada en tu historial (${vistasTxt}).`,

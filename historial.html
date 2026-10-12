@@ -113,6 +113,7 @@
     import { initAuthWidget } from './js/auth-widget.js';
     import { onCambioAuth } from './js/auth.js';
     import { getHistorialUsuario, eliminarLectura } from './js/historial.js';
+    import { renderFormularioNotas, conectarFormulariosNotas } from './nuevo-notas.js';
 
     initAuthWidget('auth-widget');
 
@@ -127,29 +128,6 @@
     function _fecha(timestamp) {
       if (!timestamp || !timestamp.toDate) return '';
       return timestamp.toDate().toLocaleDateString('es', { day: 'numeric', month: 'long', year: 'numeric' });
-    }
-
-    // Bloque "Mis notas" de una lectura guardada (solo muestra lo que se rellenó)
-    function _htmlConsulta(c) {
-      if (!c) return '';
-      const campos = [
-        ['Contexto de la consulta', c.contexto],
-        ['Interpretación personal', c.interpretacionPersonal],
-        ['Notas libres', c.notasLibres],
-        ['Observaciones durante la lectura', c.observaciones],
-        ['Carta o posición que llamó la atención', c.cartaDestacada],
-      ].filter(([, v]) => v && String(v).trim());
-      const etiquetas = (c.etiquetas || []).filter(Boolean);
-      if (!campos.length && !etiquetas.length && !c.estadoAnimo) return '';
-      const h = `font-family:'Cinzel',serif; color: var(--secondary); font-size: 0.85rem; margin: var(--space-3) 0 var(--space-1);`;
-      return `
-        <h3 style="${h}">Mis notas</h3>
-        ${c.estadoAnimo ? `<p style="font-size:0.85rem;"><strong>Estado de ánimo:</strong> ${_esc(c.estadoAnimo)}</p>` : ''}
-        ${etiquetas.length ? `<p style="font-size:0.85rem;"><strong>Etiquetas:</strong> ${etiquetas.map(_esc).join(' · ')}</p>` : ''}
-        ${campos.map(([titulo, valor]) => `
-          <p style="font-size:0.85rem; margin: var(--space-2) 0 2px;"><strong>${_esc(titulo)}</strong></p>
-          <p style="font-size:0.85rem; white-space: pre-wrap; margin:0;">${_esc(valor)}</p>
-        `).join('')}`;
     }
 
     // Veredicto: lecturas nuevas guardan las dos vistas; las antiguas, un solo bloque
@@ -238,11 +216,13 @@
               `).join('')}
             ` : ''}
 
-            ${_htmlConsulta(lectura.consulta)}
+            ${renderFormularioNotas(lectura.id, lectura.consulta)}
             ${_htmlVeredicto(lectura)}
           </div>
         </div>
       `).join('');
+
+      conectarFormulariosNotas(contenido, uid);
 
       contenido.querySelectorAll('[data-toggle]').forEach(header => {
         header.addEventListener('click', (e) => {

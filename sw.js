@@ -18,7 +18,7 @@
  *   Para forzar que todos los usuarios descarguen todo de nuevo:
  *   cambia CACHE_VERSION (por ejemplo 'v2').
  */
-const CACHE_VERSION = 'v6'; // 10/10/2026: todo lo nuevo (formulario de notas, 2 vistas, Mi Historial) en archivos de la raíz nuevo-*.js
+const CACHE_VERSION = 'v7'; // 11/10/2026: notas dentro de Mi Historial (nuevo-notas.js); el veredicto ya no lleva formulario
 const CACHE_CARCASA = 'codigo-cartas-carcasa-' + CACHE_VERSION;
 const CACHE_DATOS = 'codigo-cartas-datos-' + CACHE_VERSION;
 const CACHE_IMAGENES = 'codigo-cartas-imagenes-' + CACHE_VERSION;
@@ -81,6 +81,7 @@ const PRECARGAR = [
   "js/automatic.js",
   "js/card-helpers.js",
   "nuevo-formulario.js",
+  "nuevo-notas.js",
   "nuevo-guardar.js",
   "nuevo-veredicto-marsella.js",
   "nuevo-veredicto-rws.js",
