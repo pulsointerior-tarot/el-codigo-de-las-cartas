@@ -105,6 +105,10 @@ export function renderFormularioConsulta() {
         </div>
       </div>
 
+      <p id="fc-aviso-cambios" class="formulario-consulta__ayuda" role="status" hidden style="color: var(--secondary);">
+        Hay cambios sin guardar: pulsa «Actualizar lectura guardada» para que queden en el historial.
+      </p>
+
       <p id="fc-estado-vistas" class="formulario-consulta__ayuda" role="status" aria-live="polite">
         ${TEXTOS_ESTADO['solo-estudio']}
       </p>
@@ -123,7 +127,17 @@ export function renderFormularioConsulta() {
  * @param {() => void} onGuardar
  */
 export function conectarFormularioConsulta(onGuardar) {
-  document.getElementById('btn-guardar-historial-form')?.addEventListener('click', onGuardar);
+  const btn = document.getElementById('btn-guardar-historial-form');
+  const aviso = document.getElementById('fc-aviso-cambios');
+  btn?.addEventListener('click', async () => {
+    await onGuardar();
+    if (aviso) aviso.hidden = true;
+  });
+  // Tras el primer guardado, cualquier cambio en las notas avisa de que hay que actualizar.
+  const form = document.getElementById('formulario-consulta');
+  const marcar = () => { if (aviso && btn && btn.textContent.includes('Actualizar')) aviso.hidden = false; };
+  form?.addEventListener('input', marcar);
+  form?.addEventListener('change', marcar);
 }
 
 function _valor(id) {

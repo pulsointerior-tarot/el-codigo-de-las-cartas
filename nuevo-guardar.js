@@ -99,7 +99,11 @@ export function guardarLecturaActual(datos) {
         id = await guardarLectura(uid, lectura);
         datos.onGuardada?.(id);
       }
-      const vistasTxt = vistas.lecturaGenerada ? 'con las dos vistas' : 'con la vista de estudio';
+      const c = lectura.consulta || {};
+      const conNotas = [c.contexto, c.interpretacionPersonal, c.notasLibres, c.observaciones, c.cartaDestacada, c.estadoAnimo]
+        .some(v => String(v || '').trim()) || (c.etiquetas || []).length > 0;
+      const vistasTxt = (vistas.lecturaGenerada ? 'con las dos vistas' : 'con la vista de estudio')
+        + (conNotas ? ', con notas' : ', sin notas');
       mostrarToast(
         datos.lecturaId ? `Lectura actualizada en tu historial (${vistasTxt}).`
                         : `Lectura guardada en tu historial (${vistasTxt}).`,
