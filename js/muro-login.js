@@ -78,7 +78,8 @@ function _mostrarLogin(mensaje) {
       // onCambioAuth se dispara solo con el nuevo estado; no hace falta
       // hacer nada más acá.
     } catch (err) {
-      errorEl.textContent = mensajeError(err);
+      // DIAGNÓSTICO: se añade el código real entre corchetes para saber la causa exacta.
+      errorEl.textContent = mensajeError(err) + ' [' + ((err && (err.code || err.message)) || 'sin código') + ']';
     }
   });
 }
@@ -105,7 +106,28 @@ function _mostrarNoAutorizado(email) {
 // bloquear mientras se resuelve el estado de sesión, que es asíncrono).
 _mostrarCargando();
 
+// DIAGNÓSTICO: si Firebase no contesta en 8 segundos, en vez de dejar la
+// pantalla en blanco se muestra un panel con datos del aparato.
+let _respondio = false;
+setTimeout(() => {
+  if (_respondio) return;
+  const div = _crearOverlay();
+  document.documentElement.style.visibility = '';
+  div.innerHTML = `
+    <h1 style="font-family:'Cinzel',serif; color:#C9A84C; font-size:1.4rem; margin:0;">El Código de las Cartas</h1>
+    <p style="max-width:340px; margin:0;">Firebase no respondió en 8 segundos.</p>
+    <p id="muro-diag" style="max-width:340px; font-size:0.75rem; opacity:0.8; margin:0; word-break:break-word;"></p>
+    <button id="muro-reintentar" style="background:#C9A84C; color:#0A0A0A; border:none; border-radius:6px; padding:0.6rem 1.25rem; font-size:0.9rem; cursor:pointer;">Reintentar</button>
+  `;
+  div.querySelector('#muro-diag').textContent =
+    'Internet: ' + (navigator.onLine ? 'sí' : 'no') +
+    ' | IndexedDB: ' + (typeof indexedDB !== 'undefined' ? 'sí' : 'NO') +
+    ' | ' + navigator.userAgent;
+  div.querySelector('#muro-reintentar').addEventListener('click', () => location.reload());
+}, 8000);
+
 onCambioAuth((user) => {
+  _respondio = true;
   if (!user) {
     _mostrarLogin('Iniciá sesión para continuar.');
     return;
