@@ -16,7 +16,13 @@
  */
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js';
-import { getAuth } from 'https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js';
+import {
+  initializeAuth,
+  browserLocalPersistence,
+  browserSessionPersistence,
+  inMemoryPersistence,
+  browserPopupRedirectResolver,
+} from 'https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js';
 import { getFirestore } from 'https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js';
 
 // Ninguna de estas claves es secreta — viajan en el HTML público de
@@ -34,5 +40,11 @@ const FIREBASE_CONFIG = {
 
 const app = initializeApp(FIREBASE_CONFIG);
 
-export const auth = getAuth(app);
+// Si el navegador no puede guardar la sesión en un sitio (por ejemplo
+// IndexedDB dañado: "Database is closing/hidden"), Firebase prueba el
+// siguiente de la lista en vez de fallar.
+export const auth = initializeAuth(app, {
+  persistence: [browserLocalPersistence, browserSessionPersistence, inMemoryPersistence],
+  popupRedirectResolver: browserPopupRedirectResolver,
+});
 export const db = getFirestore(app);
