@@ -89,5 +89,5 @@ export function mensajeError(error) {
     'auth/popup-closed-by-user': 'Se cerró la ventana de Google antes de terminar.',
     'auth/too-many-requests': 'Demasiados intentos. Probá de nuevo en un rato.',
   };
-  return MAPA[error?.code] || 'Ocurrió un error. Probá de nuevo.';
+  return MAPA[error?.code] || 'Ocurrió un error. Probá de nuevo. [' + (error?.code || error?.message || 'desconocido') + ']';
 }
